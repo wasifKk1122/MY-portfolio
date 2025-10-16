@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>UltraPortfolio — Muhammad Wasif</title>
+  <meta name="description" content="Responsive single-file portfolio — Home, About, Projects, Blog, Contact. Includes animations, theme toggle, project modal and simple contact validation." />
+  <style>
+    /* ====== Root variables ====== */
+    :root{
+      --bg:#0f1724; --card:#0b1220; --muted:#9aa4b2; --accent:#7c3aed; --glass:rgba(255,255,255,0.04);
+      --glass-2: rgba(255,255,255,0.02);
+      --radius:16px; --fw-bold:700; --fw-medium:600; --container:1100px;
+    }
+    [data-theme="light"]{
+      --bg: #f7fbff; --card:#ffffff; --muted:#5b6b7a; --accent:#6b21a8; --glass: rgba(12,18,28,0.04);
+    }
+
+    /* ====== Base ====== */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: radial-gradient(1200px 400px at 10% 10%, rgba(124,58,237,0.12), transparent), var(--bg);
+      color: #e6eef6; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      line-height:1.45;
+      padding:40px 20px;
+    }
+
+    .container{max-width:var(--container);margin:0 auto}
+
+    /* ====== Header / Nav ====== */
+    header{position:sticky;top:18px;z-index:40}
+    .nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px;background:linear-gradient(180deg,var(--glass),transparent);backdrop-filter: blur(8px);border-radius:14px}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#06b6d4);display:grid;place-items:center;font-weight:800;color:white}
+    .brand h1{font-size:16px;margin:0}
+    nav a{color:var(--muted);text-decoration:none;margin:0 8px;font-weight:600}
+    nav a.active{color:var(--accent)}
+    .nav-actions{display:flex;gap:10px;align-items:center}
+    .btn{padding:9px 14px;border-radius:12px;background:linear-gradient(90deg,rgba(255,255,255,0.03),transparent);border:1px solid rgba(255,255,255,0.04);cursor:pointer}
+    .btn-primary{background:linear-gradient(90deg,var(--accent),#06b6d4);color:white;border:none}
+
+    /* ====== Hero ====== */
+    .hero{display:grid;grid-template-columns:1fr 420px;gap:30px;align-items:center;padding:60px 0}
+    .card{background:linear-gradient(180deg,var(--card),transparent);padding:28px;border-radius:var(--radius);box-shadow:0 6px 30px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.03)}
+    .hero-title{font-size: clamp(26px,4vw,40px);margin:0 0 14px}
+    .hero-sub{color:var(--muted);font-size:16px;margin-bottom:18px}
+    .cta-row{display:flex;gap:12px}
+
+    /* ====== Quick stats ====== */
+    .stats{display:flex;gap:12px;margin-top:18px}
+    .stat{background:var(--glass-2);padding:12px;border-radius:12px;text-align:center;min-width:110px}
+    .stat h3{margin:0;font-size:18px}
+    .stat p{margin:6px 0 0;color:var(--muted);font-size:13px}
+
+    /* ====== Profile card ====== */
+    .profile{display:flex;flex-direction:column;gap:16px;align-items:center;text-align:center}
+    .avatar{width:160px;height:160px;border-radius:20px;background:linear-gradient(135deg,#0ea5a5, var(--accent));display:grid;place-items:center;font-size:48px;font-weight:800;color:white;box-shadow:0 10px 30px rgba(12,18,28,0.6)}
+    .tag{padding:6px 10px;border-radius:999px;background:linear-gradient(90deg,rgba(255,255,255,0.02),transparent);font-weight:600}
+
+    /* ====== Sections ====== */
+    section{padding:56px 0}
+    h2.section-title{font-size:20px;margin:0 0 18px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+
+    /* ====== Projects ====== */
+    .project{padding:16px;border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border:1px solid rgba(255,255,255,0.03);cursor:pointer}
+    .project img{width:100%;height:160px;object-fit:cover;border-radius:10px;margin-bottom:12px}
+    .project h3{margin:0 0 6px}
+    .tags{display:flex;gap:8px;flex-wrap:wrap}
+    .tag-sm{padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.03);font-size:12px}
+
+    /* ====== Skills ====== */
+    .skill{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px;border-radius:10px;background:var(--glass-2)}
+    .bar{height:10px;border-radius:8px;background:rgba(255,255,255,0.05);overflow:hidden}
+    .bar > i{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,var(--accent),#06b6d4)}
+
+    /* ====== Contact ====== */
+    form{display:grid;gap:12px}
+    input,textarea{padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+    .row{display:flex;gap:12px}
+
+    /* ====== Footer ====== */
+    footer{padding:30px 0;text-align:center;color:var(--muted)}
+
+    /* ====== Modal ====== */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(2,6,23,0.6);display:grid;place-items:center;z-index:60;opacity:0;pointer-events:none;transition:all .22s}
+    .modal-backdrop.open{opacity:1;pointer-events:auto}
+    .modal{width:min(900px,94%);max-height:86vh;overflow:auto;padding:20px;border-radius:14px;background:linear-gradient(180deg,var(--card),transparent);border:1px solid rgba(255,255,255,0.04)}
+
+    /* ====== Utilities ====== */
+    .flex{display:flex}
+    .center{align-items:center}
+    .spaced{justify-content:space-between}
+
+    /* ====== Responsive ====== */
+    @media (max-width:980px){
+      .hero{grid-template-columns:1fr}
+      .grid-3{grid-template-columns:repeat(2,1fr)}
+      nav a{display:none}
+    }
+    @media (max-width:640px){
+      .grid-3{grid-template-columns:1fr}
+      .nav{padding:8px}
+      .avatar{width:120px;height:120px}
+    }
+
+    /* ====== Tiny animations ====== */
+    .fade-up{opacity:0;transform:translateY(10px);animation:fadeUp .6s ease forwards}
+    @keyframes fadeUp{to{opacity:1;transform:none}}
+
+  </style>
+</head>
+<body data-theme="dark">
+  <div class="container">
+    <header>
+      <div class="nav">
+        <div class="brand">
+          <div class="logo">MK</div>
+          <div>
+            <h1 style="font-size:14px;margin:0">Muhammad.Wasif</h1>
+            <div style="font-size:12px;color:var(--muted)">Fullstack Developer • Designer</div>
+          </div>
+        </div>
+        <nav aria-label="Main navigation">
+          <a href="#home" class="nav-link active">Home</a>
+          <a href="#about" class="nav-link">About</a>
+          <a href="#projects" class="nav-link">Projects</a>
+          <a href="#skills" class="nav-link">Skills</a>
+          <a href="#contact" class="nav-link">Contact</a>
+        </nav>
+        <div class="nav-actions">
+          <button title="Theme" id="themeToggle" class="btn">🌗</button>
+          <button class="btn btn-primary" id="downloadBtn">Download CV</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- HERO -->
+      <section id="home" class="hero">
+        <div class="card fade-up">
+          <h2 class="hero-title">Hi, I'm <strong style="color:var(--accent)">Muhammad Wasif</strong> — I craft elegant web experiences.</h2>
+          <p class="hero-sub">I build fast, accessible and delightful interfaces for web and mobile. I love animation, good typography and pixel-perfect UI.</p>
+          <div class="cta-row">
+            <button class="btn btn-primary" onclick="scrollToSection('projects')">See Projects</button>
+            <button class="btn" onclick="scrollToSection('contact')">Hire me</button>
+          </div>
+
+          <div class="stats">
+            <div class="stat"><h3>2+</h3><p>Years experience</p></div>
+            <div class="stat"><h3>40+</h3><p>Projects</p></div>
+            <div class="stat"><h3>10</h3><p>Open source</p></div>
+          </div>
+          <div style="margin-top:16px;color:var(--muted);font-size:13px">Pro tip: Click any project card to open details.</div>
+        </div>
+
+        <aside class="profile card fade-up">
+          <div class="avatar">MW</div>
+          <div style="font-weight:700">Muhammad Wasif</div>
+          <div class="tag">Frontend • React • UI/UX</div>
+          <div style="color:var(--muted);font-size:14px">Based in: Pakistan • Open to remote</div>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <a class="btn" href="#contact">Message</a>
+            <a class="btn" href="#projects">Portfolio</a>
+          </div>
+        </aside>
+      </section>
+
+      <!-- ABOUT -->
+      <section id="about" class="card">
+        <div class="grid-2">
+          <div>
+            <h2 class="section-title">About me</h2>
+            <p style="color:var(--muted)">I'm a product-focused fullstack developer who turns ideas into polished digital products. I collaborate with designers, PMs and engineers to ship delightful user experiences.</p>
+            <ul style="color:var(--muted);margin-top:14px">
+              <li>Strong JS + React background</li>
+              <li>Design systems & accessible components</li>
+              <li>Performance-minded and test-oriented</li>
+            </ul>
+            <div style="margin-top:14px">
+              <a class="btn btn-primary" href="#contact">Let's talk</a>
+              <a class="btn" href="#projects">My work</a>
+            </div>
+          </div>
+          <div>
+            <h2 class="section-title">Quick facts</h2>
+            <div style="display:grid;gap:12px">
+              <div class="skill"><div>Preferred stack</div><div style="font-weight:700">React • Next • Node</div></div>
+              <div class="skill"><div>Available</div><div style="font-weight:700">Freelance / Contract</div></div>
+              <div class="skill"><div>Languages</div><div style="font-weight:700">English • Urdu</div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROJECTS -->
+      <section id="projects">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <h2 class="section-title">Selected projects</h2>
+          <div style="display:flex;gap:8px">
+            <button class="btn" onclick="filterProjects('all')">All</button>
+            <button class="btn" onclick="filterProjects('web')">Web</button>
+            <button class="btn" onclick="filterProjects('mobile')">Mobile</button>
+            <button class="btn" onclick="filterProjects('oss')">Open Source</button>
+          </div>
+        </div>
+
+        <div id="projectsGrid" class="grid-3">
+          <!-- Project items inserted by JS -->
+        </div>
+      </section>
+
+      <!-- SKILLS -->
+      <section id="skills" class="card">
+        <h2 class="section-title">Skills & Tools</h2>
+        <div style="display:grid;gap:12px">
+          <div class="skill"><div>JavaScript</div><div style="width:50%"><div class="bar"><i style="width:92%"></i></div></div></div>
+          <div class="skill"><div>React / Next.js</div><div style="width:50%"><div class="bar"><i style="width:90%"></i></div></div></div>
+          <div class="skill"><div>Design & Figma</div><div style="width:50%"><div class="bar"><i style="width:78%"></i></div></div></div>
+          <div class="skill"><div>Node / APIs</div><div style="width:50%"><div class="bar"><i style="width:82%"></i></div></div></div>
+        </div>
+      </section>
+
+      <!-- CONTACT -->
+      <section id="contact">
+        <div class="card">
+          <h2 class="section-title">Contact</h2>
+          <p style="color:var(--muted)">Interested in working together? Send a message — I'll reply within 24–48 hours.</p>
+          <form id="contactForm" onsubmit="return handleContact(event)">
+            <div class="row">
+              <input id="name" required placeholder="Your name" />
+              <input id="email" type="email" required placeholder="Email" />
+            </div>
+            <textarea id="message" rows="6" required placeholder="Tell me about your project"></textarea>
+            <div style="display:flex;gap:12px">
+              <button class="btn btn-primary" type="submit">Send message</button>
+              <button class="btn" type="button" onclick="copyEmail()">Copy email</button>
+            </div>
+            <div id="contactStatus" style="color:var(--muted);font-size:13px;margin-top:8px"></div>
+          </form>
+        </div>
+      </section>
+
+      <footer>
+        <div class="card" style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+          <div style="color:var(--muted)">© <span id="year"></span> Your Name — Crafted with care</div>
+          <div style="display:flex;gap:8px;color:var(--muted)">
+            <a class="btn" href="#">Twitter</a>
+            <a class="btn" href="#">GitHub</a>
+            <a class="btn" href="#">Dribbble</a>
+            <a class="btn" href="#">Whatsapp</a>
+          </div>
+        </div>
+      </footer>
+
+    </main>
+  </div>
+
+  <!-- Modal structure -->
+  <div id="modalBackdrop" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal" id="modalContent">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+
+  <script>
+    // ====== Simple SPA-ish nav highlight + smooth scroll ======
+    document.querySelectorAll('.nav-link').forEach(a=>a.addEventListener('click',e=>{
+      document.querySelectorAll('.nav-link').forEach(x=>x.classList.remove('active'));
+      e.target.classList.add('active');
+      const id = e.target.getAttribute('href').slice(1);
+      document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'});
+      e.preventDefault();
+    }));
+
+    function scrollToSection(id){document.getElementById(id).scrollIntoView({behavior:'smooth'});}
+
+    // ====== Theme toggle persisted to localStorage ======
+    const themeToggle = document.getElementById('themeToggle');
+    const root = document.documentElement;
+    const saved = localStorage.getItem('theme');
+    if(saved) root.setAttribute('data-theme', saved);
+    themeToggle.addEventListener('click', ()=>{
+      const cur = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      root.setAttribute('data-theme', cur);
+      localStorage.setItem('theme', cur);
+    });
+
+    // ====== Year ======
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ====== Projects data ======
+    const projects = [
+      {id:1,title:'Nova Dashboard',desc:'A realtime analytics dashboard with custom charts and permissions.',tags:['web'],img:'https://images.unsplash.com/photo-1523475496153-3d6cc0a3d1b9?auto=format&fit=crop&w=1200&q=60'},
+      {id:2,title:'Pulse Mobile App',desc:'Cross-platform mobile app for habit tracking with offline-first sync.',tags:['mobile'],img:'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1200&q=60'},
+      {id:3,title:'Open Widgets',desc:'A set of accessible UI widgets published as open source.',tags:['oss'],img:'https://images.unsplash.com/photo-1508057198894-247b23fe5ade?auto=format&fit=crop&w=1200&q=60'},
+      {id:4,title:'Commerce UI',desc:'E‑commerce storefront with headless CMS integration.',tags:['web'],img:'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1200&q=60'},
+      {id:5,title:'MapVoyage',desc:'Location discovery app with offline maps and curated guides.',tags:['mobile','web'],img:'https://images.unsplash.com/photo-1524678606370-a47ad25cb82a?auto=format&fit=crop&w=1200&q=60'},
+      {id:6,title:'Design System',desc:'A modular design system shipped to multiple products.',tags:['oss','web'],img:'https://images.unsplash.com/photo-1532619187606-2b5f3696f58a?auto=format&fit=crop&w=1200&q=60'}
+    ];
+
+    const grid = document.getElementById('projectsGrid');
+    function renderProjects(list){
+      grid.innerHTML = '';
+      list.forEach(p=>{
+        const el = document.createElement('article'); el.className='project fade-up';
+        el.innerHTML = `
+          <img loading="lazy" src="${p.img}" alt="${p.title}">
+          <h3>${p.title}</h3>
+          <p style="color:var(--muted);font-size:13px">${p.desc}</p>
+          <div style="margin-top:10px" class="tags">${p.tags.map(t=>`<span class=\"tag-sm\">${t}</span>`).join('')}</div>
+        `;
+        el.addEventListener('click',()=>openProject(p));
+        grid.appendChild(el);
+      });
+    }
+    renderProjects(projects);
+
+    function filterProjects(tag){
+      if(tag==='all') renderProjects(projects);
+      else renderProjects(projects.filter(p=>p.tags.includes(tag)));
+    }
+
+    // ====== Modal ======
+    const backdrop = document.getElementById('modalBackdrop');
+    const modalContent = document.getElementById('modalContent');
+    function openProject(p){
+      modalContent.innerHTML = `<h2 style='margin-top:0'>${p.title}</h2><img src='${p.img}' style='width:100%;height:240px;object-fit:cover;border-radius:8px;margin-bottom:12px' alt=''><p style='color:var(--muted)'>${p.desc}</p><div style='margin-top:12px;display:flex;gap:8px'><button class='btn btn-primary' onclick='closeModal()'>Close</button><a class='btn' href='#'>View live</a></div>`;
+      backdrop.classList.add('open'); backdrop.setAttribute('aria-hidden','false');
+    }
+    function closeModal(){backdrop.classList.remove('open'); backdrop.setAttribute('aria-hidden','true');}
+    backdrop.addEventListener('click',e=>{ if(e.target===backdrop) closeModal(); });
+
+    // ====== Contact handling (no backend) ======
+    function handleContact(e){
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const message = document.getElementById('message').value.trim();
+      const status = document.getElementById('contactStatus');
+      if(!name||!email||!message){ status.textContent='Please fill all fields.'; return false; }
+      // Simulate sending
+      status.textContent = 'Sending...';
+      setTimeout(()=>{
+        status.textContent = 'Message sent! I will reply to ' + email + ' soon.'; 
+        e.target.reset();
+      },900);
+      return false;
+    }
+
+    function copyEmail(){ navigator.clipboard?.writeText('youremail@example.com').then(()=>{
+      const s = document.getElementById('contactStatus'); s.textContent='Email copied to clipboard'; setTimeout(()=>s.textContent='',2500);
+    }).catch(()=>alert('Copy failed — email: youremail@example.com')) }
+
+    // ====== Download CV (generate simple text PDF-like) ======
+    document.getElementById('downloadBtn').addEventListener('click',()=>{
+      const data = `Your Name - CV\n\nExperience:\n- Fullstack developer...\n`;
+      const blob = new Blob([data],{type:'text/plain'}); const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href=url; a.download='YourName-CV.txt'; a.click(); URL.revokeObjectURL(url);
+    });
+
+    // ====== Small accessibility tweaks ======
+    window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeModal(); });
+
+  </script>
+</body>
+</html>
